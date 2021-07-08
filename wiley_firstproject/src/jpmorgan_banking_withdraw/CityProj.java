@@ -15,8 +15,15 @@ public class CityProj {
 		List <List<User5>> user1= new ArrayList<List<User5>>();
 		List <Address2> result=new ArrayList<Address2>();
 		List <User6> Lnewuser;
-		
+		List<String> city,city1,city2;
+		city= new ArrayList<String>();
+		city1=new ArrayList<String>();
+		city2=new ArrayList<String>();		
 		Address2 w;
+		
+		
+		//Just adding elements in the Arraylist
+		
 		l.add(new Address1("DEL",110001));
 		l.add(new Address1("BLR",560001));
 		User5 m=new User5(2,"User2",l);
@@ -31,19 +38,36 @@ public class CityProj {
 		l3.add(new Address1("BLR",560001));
 		m=new User5(3,"User3",l3);
 		user.add(m);
+		
+		//Printing Users
 		for(User5 u:user)
 		{
 			System.out.println(u);
 		}
-		List<String> city,city1,city2;
-		city= new ArrayList<String>();
-		city1=new ArrayList<String>();
-		city2=new ArrayList<String>();
+       
 		List<List<Address1>> q= new ArrayList <List<Address1>>();
 		//{u1 u2 u3}
 		//[dl, bn,bn bn, gn gn] city   { address address address }
 		//[Dl ,BLR GN]  city1
-		city=user.stream().map(u->(u.getAddress1())).flatMap(List::stream).map(u->u.city).collect(Collectors.toList());
+	/*	List<List<Address1>> h=new ArrayList<List<Address1>>();
+		h=user.stream().map(User5::getAddress1).collect(Collectors.toList());
+		l=user.stream().map(User5::getAddress1).flatMap(List::stream).collect(Collectors.toList());
+		
+		System.out.println("***********");
+		System.out.println(h);
+		System.out.println("***********");
+		System.out.println(l);
+		System.out.println("***********");
+	
+	    Run above code to understand why i used flatmap
+		
+	*/
+		/* City String list contains all the state available with duplicate 
+		 * City 1 distinct of city
+		 * City 2 contains the state which we want in our result
+		 */
+		
+		city=user.stream().map(User5::getAddress1).flatMap(List::stream).map(u->u.city).collect(Collectors.toList());
 		city1 =user.stream().map(u->(u.getAddress1())).flatMap(List::stream).map(u->u.city).distinct().collect(Collectors.toList());
 		for(String i:city1)
 		{
@@ -63,29 +87,31 @@ public class CityProj {
 			w=new Address2();
 			String check=(String)city2.get(i);
 			w.city=check;
-			w.user=user.stream().filter(u-> u.getAddress1().stream().anyMatch(bri-> bri.city==check) ).collect(Collectors.toList());
-			user1.add(w.user);
-			for(User5 o:user1.get(i))
+			for(User5 o:(user.stream().filter(u-> u.getAddress1().stream().anyMatch(bri-> bri.city==check) ).collect(Collectors.toList())))
 			{
 				Lnewuser.add(new User6(((User5)o).id,((User5)o).name));
 			}
 			w.user1=Lnewuser;
 			result.add(w);
 		}
-		//Collections.sort(result,new SortCityUser());
+		
+		// sort first based on city then sort based on id
+		Collections.sort(result,new SortCityUser());
 		for(Address2 i:result)
 		{
 			Collections.sort(((Address2)i).user1,new SortList());
 		}
+		
+		
+		//Printing the results
 		for(Address2 i:result)
 		{
-			
 			System.out.print("Address {"+i.city+", {");
 			for(User6 u:i.user1)
 			{
 				System.out.print(u+"  ");
 			}
-			System.out.println("}");
+			System.out.println("} }");
 			
 		}
 		
@@ -129,7 +155,6 @@ class Address2
 {
 	public String city;
 	public int zip;
-	public List<User5> user;
 	public List<User6> user1;
 }
 class User6 
