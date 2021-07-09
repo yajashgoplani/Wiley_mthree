@@ -3,13 +3,16 @@ package jpmorgan_banking_withdraw;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CityProj {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		Map<Address2, List<User6>> map1=new HashMap<Address2, List<User6>>();
 		List <Address1>l=new ArrayList<Address1>();
 		List <User5> user=new ArrayList<User5>();
 		List <List<User5>> user1= new ArrayList<List<User5>>();
@@ -20,7 +23,7 @@ public class CityProj {
 		city1=new ArrayList<String>();
 		city2=new ArrayList<String>();		
 		Address2 w;
-		
+		Map<Integer,String> map2=new HashMap<Integer,String>();
 		
 		//Just adding elements in the Arraylist
 		
@@ -66,8 +69,8 @@ public class CityProj {
 		 * City 1 distinct of city
 		 * City 2 contains the state which we want in our result
 		 */
-		
-		city=user.stream().map(User5::getAddress1).flatMap(List::stream).map(u->u.city).collect(Collectors.toList());
+		// [u1 u2 u3]     u->getaddress()  -------> [[a1 a2][b1 b2][c1 c2]]   ------>   [a1 a2 b1 b2 c1 c2] -------->  a1->a1.city --------[cities]
+		city=user.stream().map(User5::getAddress1).flatMap(List::stream).map(u ->u.city).collect(Collectors.toList());
 		city1 =user.stream().map(u->(u.getAddress1())).flatMap(List::stream).map(u->u.city).distinct().collect(Collectors.toList());
 		for(String i:city1)
 		{
@@ -92,6 +95,7 @@ public class CityProj {
 				Lnewuser.add(new User6(((User5)o).id,((User5)o).name));
 			}
 			w.user1=Lnewuser;
+			map1.put(w, Lnewuser);
 			result.add(w);
 		}
 		
